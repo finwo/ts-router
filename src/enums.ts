@@ -1,0 +1,18 @@
+export enum Method {
+  DELETE = 'delete',
+  GET = 'get',
+  HEAD = 'head',
+  PATCH = 'patch',
+  POST = 'post',
+  PUT = 'put',
+  OPTIONS= 'options',
+  SEARCH= 'search',
+  TRACE= 'trace',
+  PROFIND = 'profind',
+  PROPPATCH = 'proppatch',
+  MKCOL = 'mkcol',
+  COPY = 'copy',
+  MOVE = 'move',
+  LOCK = 'lock',
+  UNLOCK = 'unlock',
+}

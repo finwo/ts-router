@@ -1,0 +1,66 @@
+{
+  "name": "@finwo/router",
+  "version": "0.0.1",
+  "description": "TypeScript controller router",
+  "main": "./lib/cjs/index.js",
+  "types": "./lib/cjs/index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./lib/esm/index.d.ts",
+        "default": "./lib/esm/index.mjs"
+      },
+      "require": {
+        "types": "./lib/cjs/index.d.ts",
+        "default": "./lib/cjs/index.js"
+      }
+    }
+  },
+  "scripts": {
+    "test": "npm run linter && npm run build && node_modules/.bin/tap --reporter-arg=--reporter=html 'lib/test/**/*.test.js'",
+    "clean": "rm -rf ./lib",
+    "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:test",
+    "build:cjs": "tsc -p ./config/tsconfig.cjs.json",
+    "build:esm": "tsc -p ./config/tsconfig.esm.json && mv lib/esm/index.js lib/esm/index.mjs",
+    "build:test": "tsc -p ./config/tsconfig.test.json",
+    "linter": "eslint src",
+    "postpublish": "PACKAGE_VERSION=$(cat package.json | grep \\\"version\\\" | head -1 | awk -F: '{print $2}' | sed 's/[\",]//g' | tr -d '[[:space:]]') && npm deprecate \"@finwo/di@<${PACKAGE_VERSION}\" \"Rolling release, please update to ${PACKAGE_VERSION}\""
+  },
+  "files": [
+    "package.json",
+    "README.md",
+    "LICENSE.md",
+    "lib/cjs/",
+    "lib/esm/"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/finwo/di.git"
+  },
+  "author": "Robin Bron <robin@finwo.nl>",
+  "license": "MIT",
+  "homepage": "https://github.com/finwo/di#readme",
+  "bugs": {
+    "url": "https://github.com/finwo/di/issues"
+  },
+  "funding": {
+    "url": "https://github.com/sponsors/finwo"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.9",
+    "@types/tap": "^15.0.7",
+    "@typescript-eslint/eslint-plugin": "^5.44.0",
+    "@typescript-eslint/parser": "^5.44.0",
+    "eslint": "^8.28.0",
+    "reflect-metadata": "^0.1.13",
+    "tap": "^16.3.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.9.3"
+  },
+  "dependencies": {
+    "@finwo/di": "^1.1.3"
+  },
+  "optionalDependencies": {
+    "fastify": "^4.10.2"
+  }
+}
