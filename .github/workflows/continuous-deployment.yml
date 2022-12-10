@@ -12,6 +12,8 @@ jobs:
         with:
           node-version: 'lts/*'
           registry-url: https://registry.npmjs.org
+      - run: sudo apt-get update
+      - run: sudo apt-get install jq
       - run: npm ci --ignore-scripts
       - run: npm run linter
       - run: npm run build
