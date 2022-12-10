@@ -1,17 +1,17 @@
-// Re-export the DI methods we're using
 import 'reflect-metadata';
 import { Container } from '@finwo/di';
-import { FastifyInstance, RouteOptions, FastifyReply, FastifyRequest } from 'fastify';
+import { FastifyInstance, RouteOptions, FastifyRequest, FastifyReply } from 'fastify';
 
+// Re-export the DI methods we're using
 export { Service, Inject } from '@finwo/di';
+export { FastifyReply as Response, FastifyRequest as Request };
 export * from './decorators';
-export { Method } from './enums';
-
 
 // Actually attach the routes we define to a router
 // TODO: define required router structure
 export function attach(controllers: Function[], router: FastifyInstance) {
   for (const controller of controllers) {
+
 
     // Sanity check
     if (!Reflect.hasMetadata('controller:routes', controller)) {
@@ -25,12 +25,13 @@ export function attach(controllers: Function[], router: FastifyInstance) {
     // Register each of the controller's routes
     for(const routeKey of routeKeys) {
       // Minimal config
-      const routeConfig: RouteOptions = {
-        method  :          Reflect.getMetadata('route:method', controller, routeKey),
-        url     : prefix + Reflect.getMetadata('route:path', controller, routeKey),
+      const routeOpts: RouteOptions =  {
+        method  : Reflect.getMetadata('route:method', controller, routeKey),
+        url     : (prefix + '/' + Reflect.getMetadata('route:path', controller, routeKey)).replace(/\/+/g, '/'),
         handler : async (req: FastifyRequest, res: FastifyReply) => {
           // Maps params according to our param decorators
           const paramTypes: (string|symbol)[] = Reflect.getMetadata('design:paramtypes', controller, routeKey) || [];
+          console.log({ paramTypes });
           const instance = Container.get(controller);
           await instance[routeKey](...(paramTypes.map((paramType) => {
             switch(paramType) {
@@ -41,14 +42,23 @@ export function attach(controllers: Function[], router: FastifyInstance) {
           })));
         },
       };
+
       // Optional version
       if (Reflect.hasMetadata('route:version', controller, routeKey)) {
-        routeConfig.version = Reflect.getMetadata('route:version', controller, routeKey);
+        routeOpts.version = Reflect.getMetadata('route:version', controller, routeKey);
       }
+
+      // Register middleware
+      const middleware = [
+        ...(Reflect.getMetadata('controller:middleware', controller) || []),
+        ...(Reflect.getMetadata('route:middleware', controller, routeKey) || []),
+      ];
+
+      console.log({ middleware });
+
       // The actual registration
-      router.route(routeConfig);
+      router.route(routeOpts);
     }
   }
-
-
 }
+

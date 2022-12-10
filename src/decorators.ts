@@ -1,6 +1,6 @@
 import 'reflect-metadata';
 import { Service } from '@finwo/di';
-import { Method } from './enums';
+import { HTTPMethod } from 'find-my-way';
 
 // Just mark a class as a router
 export function Controller(prefix?: string): ClassDecorator {
@@ -14,34 +14,17 @@ export function Controller(prefix?: string): ClassDecorator {
 
 // Registers the controller's handler on the constructor
 // Registers the method+path on the handler
-export function Route(method: Method, path: string): MethodDecorator {
-  return function(constructor: any, propertyKey: string | symbol): void {
+export function Route(method: HTTPMethod, path: string): MethodDecorator {
+  return function(target: any, propertyKey: string | symbol): void {
+    const constructor = target.constructor;
     // Register the handler
-    const handlers = Reflect.getMetadata('controller:handlers', constructor) || [];
+    const handlers = Reflect.getMetadata('controller:routes', constructor) || [];
     handlers.push(propertyKey);
-    Reflect.defineMetadata('controller:handlers', handlers, constructor);
+    Reflect.defineMetadata('controller:routes', handlers, constructor);
     // Register the minimum route config
     Reflect.defineMetadata('route:method', method, constructor, propertyKey);
     Reflect.defineMetadata('route:path'  , path  , constructor, propertyKey);
     Reflect.defineMetadata('route:middleware', Reflect.getMetadata('controller:middleware', constructor) || [], constructor);
-  };
-}
-
-// Register middleware
-export function Middleware(handlers: Function | Function[]): ClassDecorator | MethodDecorator {
-  return function(constructor: Function, propertyKey?: string | symbol): void {
-    if (!Array.isArray(handlers)) handlers = [handlers];
-    const name       = propertyKey ? 'route' : 'controller';
-    const middleware = (
-      propertyKey
-        ? Reflect.getMetadata(`${name}:middleware`, constructor, propertyKey)
-        : Reflect.getMetadata(`${name}:middleware`, constructor)
-    ) || [];
-    middleware.push(...(handlers.filter(m => m)));
-    propertyKey
-      ? Reflect.defineMetadata(`${name}:middleware`, middleware, constructor, propertyKey)
-      : Reflect.defineMetadata(`${name}:middleware`, middleware, constructor)
-    ;
   };
 }
 
@@ -55,51 +38,54 @@ export function Version(version: string): MethodDecorator {
 // Mark a handler parameter as wanting the request there
 export function Req(): ParameterDecorator {
   return function(target: any, key: string | symbol, index: number) {
-    const paramTypes: any[] = Reflect.getMetadata('design:paramtypes', target, key) || [];
+    const constructor = target.constructor;
+    const paramTypes: any[] = Reflect.getMetadata('design:paramtypes', constructor, key) || [];
     paramTypes[index] = 'req';
-    Reflect.defineMetadata('design:paramtypes', paramTypes, target, key);
+    Reflect.defineMetadata('design:paramtypes', paramTypes, constructor, key);
   };
 }
 
 export function Res(): ParameterDecorator {
   return function(target: any, key: string | symbol, index: number) {
-    const paramTypes: any[] = Reflect.getMetadata('design:paramtypes', target, key) || [];
+    const constructor = target.constructor;
+    const paramTypes: any[] = Reflect.getMetadata('design:paramtypes', constructor, key) || [];
     paramTypes[index] = 'res';
-    Reflect.defineMetadata('design:paramtypes', paramTypes, target, key);
+    Reflect.defineMetadata('design:paramtypes', paramTypes, constructor, key);
   };
 }
 
 // Method shorthand
 export function Delete(path: string): MethodDecorator {
-  return Route(Method.DELETE, path);
+  return Route('DELETE', path);
 }
 
 // Method shorthand
 export function Get(path: string): MethodDecorator {
-  return Route(Method.GET, path);
+  return Route('GET', path);
 }
 
 // Method shorthand
 export function Head(path: string): MethodDecorator {
-  return Route(Method.HEAD, path);
+  return Route('HEAD', path);
 }
 
 // Method shorthand
 export function Patch(path: string): MethodDecorator {
-  return Route(Method.HEAD, path);
+  return Route('PATCH', path);
 }
 
 // Method shorthand
 export function Post(path: string): MethodDecorator {
-  return Route(Method.POST, path);
+  return Route('POST', path);
 }
 
 // Method shorthand
 export function Put(path: string): MethodDecorator {
-  return Route(Method.PUT, path);
+  return Route('PUT', path);
 }
 
 // Method shorthand
 export function Options(path: string): MethodDecorator {
-  return Route(Method.OPTIONS, path);
+  return Route('OPTIONS', path);
 }
+

@@ -29,7 +29,7 @@
   "files": [
     "package.json",
     "README.md",
-    "LICENSE.md",
+    "LICENSE",
     "lib/cjs/",
     "lib/esm/"
   ],
