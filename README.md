@@ -88,14 +88,8 @@ into your controllers to decouple from your dependencies.
 
 ## Middleware
 
-Middleware is **only** supported if you register
-[@fastify/middie][npm:@fastify/middie:url] before registering the controllers:
-
-```ts
-fastify
-  .register(require('@fastify/middie'))
-  .register(require('@finwo/router').plugin, controllers)
-```
+Express-style middleware is supported, but is implemented by wrapping the route
+handler instead of fastify's `use` method.
 
 ## Versioned routes
 
@@ -123,7 +117,6 @@ fastify.addHook('onSend', (req, reply, payload, done) => {
 
 [license:img]: https://img.shields.io/github/license/finwo/router
 [license:url]: https://github.com/finwo/router/blob/main/LICENSE
-[npm:@fastify/middie:url]: https://npmjs.com/package/@fastify/middie
 [npm:@finwo/di:url]: https://npmjs.com/package/@finwo/di
 [npm:@finwo/router:url]: https://npmjs.com/package/@finwo/router
 [npm:@finwo/router:img]: https://img.shields.io/npm/v/@finwo/router
