@@ -17,7 +17,7 @@
     }
   },
   "scripts": {
-    "test": "npm run linter && npm run build && node_modules/.bin/tap --reporter-arg=--reporter=html 'lib/test/**/*.test.js'",
+    "test": "npm run linter && npm run build && node_modules/.bin/tap --branches=52 --functions=50 --lines=70 --statements=70 --reporter-arg=--reporter=html 'lib/test/**/*.test.js'",
     "clean": "rm -rf ./lib",
     "build": "npm run clean && npm run build:esm && npm run build:cjs && npm run build:test",
     "build:cjs": "tsc -p ./config/tsconfig.cjs.json",

@@ -27,11 +27,10 @@ export function attach(controllers: Function[], router: FastifyInstance) {
       // Minimal config
       const routeOpts: RouteOptions =  {
         method  : Reflect.getMetadata('route:method', controller, routeKey),
-        url     : (prefix + '/' + Reflect.getMetadata('route:path', controller, routeKey)).replace(/\/+/g, '/'),
+        url     : prefix + Reflect.getMetadata('route:path', controller, routeKey),
         handler : async (req: FastifyRequest, res: FastifyReply) => {
           // Maps params according to our param decorators
           const paramTypes: (string|symbol)[] = Reflect.getMetadata('design:paramtypes', controller, routeKey) || [];
-          console.log({ paramTypes });
           const instance = Container.get(controller);
           await instance[routeKey](...(paramTypes.map((paramType) => {
             switch(paramType) {
@@ -48,13 +47,20 @@ export function attach(controllers: Function[], router: FastifyInstance) {
         routeOpts.version = Reflect.getMetadata('route:version', controller, routeKey);
       }
 
-      // Register middleware
+      // Register middleware WITH method filter
+      // Requires @fastify/middie to be registered
+      // Reverse due to factoried decorator execution order
       const middleware = [
-        ...(Reflect.getMetadata('controller:middleware', controller) || []),
-        ...(Reflect.getMetadata('route:middleware', controller, routeKey) || []),
-      ];
-
-      console.log({ middleware });
+        Reflect.getMetadata('controller:middleware', controller) || [],
+        Reflect.getMetadata('route:middleware', controller, routeKey) || [],
+      ].flat();
+      middleware.forEach(mw => {
+        // @ts-ignore .use most certainly exists
+        router.use(routeOpts.url, (req: FastifyRequest, res: FastifyReply, cb: Function) => {
+          if (req.method !== routeOpts.method) return cb();
+          return mw(req, res, cb);
+        });
+      });
 
       // The actual registration
       router.route(routeOpts);

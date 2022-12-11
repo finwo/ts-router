@@ -22,15 +22,26 @@ export function Route(method: HTTPMethod, path: string): MethodDecorator {
     handlers.push(propertyKey);
     Reflect.defineMetadata('controller:routes', handlers, constructor);
     // Register the minimum route config
-    Reflect.defineMetadata('route:method', method, constructor, propertyKey);
-    Reflect.defineMetadata('route:path'  , path  , constructor, propertyKey);
-    Reflect.defineMetadata('route:middleware', Reflect.getMetadata('controller:middleware', constructor) || [], constructor);
+    Reflect.defineMetadata('route:method'    , method                                                                 , constructor, propertyKey);
+    Reflect.defineMetadata('route:path'      , path                                                                   , constructor, propertyKey);
+    Reflect.defineMetadata('route:middleware', Reflect.getMetadata('route:middleware', constructor, propertyKey) || [], constructor, propertyKey);
+  };
+}
+
+// For now, only supports middleware on routes, not controllers
+export function Middleware(mw: Function | Function[]): MethodDecorator {
+  return function(target: any, propertyKey: string | symbol): void {
+    if (!Array.isArray(mw)) mw = [mw].filter(e => e);
+    const constructor = target.constructor;
+    const wares = Reflect.getMetadata('route:middleware', constructor, propertyKey) || [];
+    Reflect.defineMetadata('route:middleware', [mw,wares].flat(), constructor, propertyKey);
   };
 }
 
 // Mark the route as being a specific version
 export function Version(version: string): MethodDecorator {
-  return function(constructor: any, propertyKey: string | symbol): void {
+  return function(target: any, propertyKey: string | symbol): void {
+    const constructor = target.constructor;
     Reflect.defineMetadata('route:version', version, constructor, propertyKey);
   };
 }
@@ -55,37 +66,37 @@ export function Res(): ParameterDecorator {
 }
 
 // Method shorthand
-export function Delete(path: string): MethodDecorator {
+export function Delete(path = '/'): MethodDecorator {
   return Route('DELETE', path);
 }
 
 // Method shorthand
-export function Get(path: string): MethodDecorator {
+export function Get(path = '/'): MethodDecorator {
   return Route('GET', path);
 }
 
 // Method shorthand
-export function Head(path: string): MethodDecorator {
+export function Head(path = '/'): MethodDecorator {
   return Route('HEAD', path);
 }
 
 // Method shorthand
-export function Patch(path: string): MethodDecorator {
+export function Patch(path = '/'): MethodDecorator {
   return Route('PATCH', path);
 }
 
 // Method shorthand
-export function Post(path: string): MethodDecorator {
+export function Post(path = '/'): MethodDecorator {
   return Route('POST', path);
 }
 
 // Method shorthand
-export function Put(path: string): MethodDecorator {
+export function Put(path = '/'): MethodDecorator {
   return Route('PUT', path);
 }
 
 // Method shorthand
-export function Options(path: string): MethodDecorator {
+export function Options(path = '/'): MethodDecorator {
   return Route('OPTIONS', path);
 }
 
