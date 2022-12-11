@@ -29,6 +29,7 @@ export function Route(method: HTTPMethod, path: string): MethodDecorator {
 }
 
 // For now, only supports middleware on routes, not controllers
+// export function Middleware(mw: Function | Function[]): MethodDecorator {
 export function Middleware(mw: Function | Function[]): MethodDecorator {
   return function(target: any, propertyKey: string | symbol): void {
     if (!Array.isArray(mw)) mw = [mw].filter(e => e);

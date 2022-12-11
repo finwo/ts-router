@@ -42,23 +42,28 @@ export function plugin(router: FastifyInstance, controllers: Function[], done: F
 
       // Optional version
       if (Reflect.hasMetadata('route:version', controller, routeKey)) {
-        routeOpts.version = Reflect.getMetadata('route:version', controller, routeKey);
+        routeOpts.constraints = routeOpts.constraints || {};
+        routeOpts.constraints.version = Reflect.getMetadata('route:version', controller, routeKey);
       }
 
-      // Register middleware WITH method filter
-      // Requires @fastify/middie to be registered
-      // Reverse due to factoried decorator execution order
+      // Register express-style middleware method filter
+      // Reverse, because we're modding the handler
       const middleware = [
         Reflect.getMetadata('controller:middleware', controller) || [],
         Reflect.getMetadata('route:middleware', controller, routeKey) || [],
-      ].flat();
-      middleware.forEach(mw => {
-        // @ts-ignore .use most certainly exists
-        router.use(routeOpts.url, (req: FastifyRequest, res: FastifyReply, cb: Function) => {
-          if (req.method !== routeOpts.method) return cb();
-          return mw(req, res, cb);
-        });
-      });
+      ].flat().reverse();
+      for(const mw of middleware) {
+        const previousHandler = routeOpts.handler;
+        routeOpts.handler = async (...args) => {
+          return await new Promise((resolve, reject) => {
+            mw(args[0], args[1], (err?: Error) => {
+              if (err) return reject(err);
+              // @ts-ignore This is valid, copied arguments from original
+              resolve(previousHandler(...args));
+            });
+          });
+        };
+      }
 
       // The actual registration
       router.route(routeOpts);
