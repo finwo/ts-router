@@ -1,7 +1,7 @@
 {
   "name": "@finwo/router",
   "version": "0.2.1",
-  "description": "TypeScript controller router",
+  "description": "TypeScript controller decorators for fastify",
   "main": "./lib/cjs/index.js",
   "types": "./lib/cjs/index.d.ts",
   "exports": {
