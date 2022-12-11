@@ -8,9 +8,8 @@ export { FastifyReply as Response, FastifyRequest as Request };
 export * from './decorators';
 
 // Actually attach the routes we define to a router
-export function plugin(router: FastifyInstance, controllers: Function[]) {
+export function plugin(router: FastifyInstance, controllers: Function[], done: Function) {
   for (const controller of controllers) {
-
 
     // Sanity check
     if (!Reflect.hasMetadata('controller:routes', controller)) {
@@ -65,6 +64,8 @@ export function plugin(router: FastifyInstance, controllers: Function[]) {
       router.route(routeOpts);
     }
   }
+
+  done();
 }
 
 export default plugin;
