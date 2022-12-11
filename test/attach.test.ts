@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 import tap = require('tap');
 import { RouteOptions } from 'fastify';
-import { plugin, Middleware, Controller, Get, Post, Version } from '../src';
+import { plugin, Middleware, Controller, Get, Post, Delete, Head, Version } from '../src';
 
 const mockedRouteCalls: RouteOptions[] = [];
 const mockedUseCalls: any[][] = [];
@@ -43,19 +43,31 @@ class TestController {
     // Intentionally empty
   }
 
+  @Delete('/destructive')
+  deleteAction() {
+    // Intentionally empty
+  }
+
+  @Head('/some')
+  someAction() {
+    // Intentionally empty
+  }
+
 }
 
 // @ts-ignore Mock implementation
-plugin(mockRouter, [TestController]);
+plugin(mockRouter, [TestController], () => undefined);
 
 // Basics
-tap.equal(mockedRouteCalls.length, 3, 'Registers 3 route as configured');
+tap.equal(mockedRouteCalls.length, 5, 'Registers 5 route as configured');
 tap.equal(mockedUseCalls.length, 5, 'Registers 5 middlewares as configured');
 
 // Registration order
-tap.equal(mockedRouteCalls[0].method, 'GET' , 'First route registered is a GET, as written in controller');
-tap.equal(mockedRouteCalls[1].method, 'POST', 'Second route registered is a POST, as written in controller');
-tap.equal(mockedRouteCalls[2].method, 'GET' , 'Thrid route registered is a GET, as written in controller');
+tap.equal(mockedRouteCalls[0].method, 'GET'   , '1st route registered is a GET, as written in controller');
+tap.equal(mockedRouteCalls[1].method, 'POST'  , '2nd route registered is a POST, as written in controller');
+tap.equal(mockedRouteCalls[2].method, 'GET'   , '3rd route registered is a GET, as written in controller');
+tap.equal(mockedRouteCalls[3].method, 'DELETE', '4th route registered is a DELETE, as written in controller');
+tap.equal(mockedRouteCalls[4].method, 'HEAD'  , '5th route registered is a HEAD, as written in controller');
 
 // Middleware registration order
 // Wrapped, so need to provide method for the filter
