@@ -8,8 +8,7 @@ export { FastifyReply as Response, FastifyRequest as Request };
 export * from './decorators';
 
 // Actually attach the routes we define to a router
-// TODO: define required router structure
-export function attach(controllers: Function[], router: FastifyInstance) {
+export function plugin(router: FastifyInstance, controllers: Function[]) {
   for (const controller of controllers) {
 
 
@@ -28,11 +27,11 @@ export function attach(controllers: Function[], router: FastifyInstance) {
       const routeOpts: RouteOptions =  {
         method  : Reflect.getMetadata('route:method', controller, routeKey),
         url     : prefix + Reflect.getMetadata('route:path', controller, routeKey),
-        handler : async (req: FastifyRequest, res: FastifyReply) => {
+        handler : (req: FastifyRequest, res: FastifyReply) => {
           // Maps params according to our param decorators
           const paramTypes: (string|symbol)[] = Reflect.getMetadata('design:paramtypes', controller, routeKey) || [];
           const instance = Container.get(controller);
-          await instance[routeKey](...(paramTypes.map((paramType) => {
+          return instance[routeKey](...(paramTypes.map((paramType) => {
             switch(paramType) {
               case 'req': return req;
               case 'res': return res;
@@ -68,3 +67,4 @@ export function attach(controllers: Function[], router: FastifyInstance) {
   }
 }
 
+export default plugin;

@@ -2,7 +2,7 @@ import 'reflect-metadata';
 
 import tap = require('tap');
 import { RouteOptions } from 'fastify';
-import { attach, Middleware, Controller, Get, Post, Version } from '../src';
+import { plugin, Middleware, Controller, Get, Post, Version } from '../src';
 
 const mockedRouteCalls: RouteOptions[] = [];
 const mockedUseCalls: any[][] = [];
@@ -46,7 +46,7 @@ class TestController {
 }
 
 // @ts-ignore Mock implementation
-attach([TestController], mockRouter);
+plugin(mockRouter, [TestController]);
 
 // Basics
 tap.equal(mockedRouteCalls.length, 3, 'Registers 3 route as configured');
