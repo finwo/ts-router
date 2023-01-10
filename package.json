@@ -50,7 +50,7 @@
     "@types/node": "^18.11.18",
     "@types/tap": "^15.0.7",
     "@typescript-eslint/eslint-plugin": "^5.48.0",
-    "@typescript-eslint/parser": "^5.48.0",
+    "@typescript-eslint/parser": "^5.48.1",
     "eslint": "^8.31.0",
     "tap": "^16.3.3",
     "ts-node": "^10.9.1",
