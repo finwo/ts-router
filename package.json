@@ -35,13 +35,13 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/finwo/router.git"
+    "url": "git+https://github.com/finwo/ts-router.git"
   },
   "author": "Robin Bron <robin@finwo.nl>",
   "license": "MIT",
-  "homepage": "https://github.com/finwo/router#readme",
+  "homepage": "https://github.com/finwo/ts-router#readme",
   "bugs": {
-    "url": "https://github.com/finwo/router/issues"
+    "url": "https://github.com/finwo/ts-router/issues"
   },
   "funding": {
     "url": "https://github.com/sponsors/finwo"
