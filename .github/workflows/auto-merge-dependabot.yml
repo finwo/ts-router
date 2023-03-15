@@ -9,9 +9,9 @@ jobs:
     - name: 'Auto approve PR by Dependabot'
       uses: hmarr/auto-approve-action@v2.0.0
       with:
-        github-token: "${{ secrets.BOT_TOKEN }}"
+        github-token: "${{ secrets.GITHUB_TOKEN }}"
     - name: 'Auto-merge PR by Dependabot'
       run: gh pr merge --auto --merge "$PR_URL"
       env:
         PR_URL: ${{github.event.pull_request.html_url}}
-        GITHUB_TOKEN: ${{secrets.BOT_TOKEN }}
+        GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN }}
