@@ -1,5 +1,5 @@
 {
-  "name": "@finwo/router",
+  "name": "@finwo/router-fastify",
   "version": "0.2.4",
   "description": "TypeScript controller decorators for fastify",
   "main": "./lib/cjs/index.js",

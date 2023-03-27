@@ -1,6 +1,6 @@
 {
   "workspaces": [
-    "packages/router-core"
+    "packages/router-fastify"
   ],
   "scripts": {
     "install:all": "npm install --workspaces",
