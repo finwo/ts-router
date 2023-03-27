@@ -1,5 +1,5 @@
 {
-  "version": "0.2.4",
+  "version": "0.3.0",
   "workspaces": [
     "packages/router-fastify"
   ],
@@ -7,6 +7,6 @@
     "install:all": "npm install --workspaces",
     "build:all": "npm run build --workspaces --if-present",
     "version": "VERSION=$(jq -r '.version' package.json) ; for d in $(jq -r '.workspaces[]' package.json); do (cd $d; jq \".version = \\\"$VERSION\\\"\" package.json | sponge package.json); done",
-    "public:all": "npm run publish --workspaces --if-present"
+    "publish:all": "npm run publish --workspaces --if-present"
   }
 }
