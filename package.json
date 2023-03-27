@@ -7,6 +7,6 @@
     "install:all": "npm install --workspaces",
     "build:all": "npm run build --workspaces --if-present",
     "version": "VERSION=$(jq -r '.version' package.json) ; for d in $(jq -r '.workspaces[]' package.json); do (cd $d; jq \".version = \\\"$VERSION\\\"\" package.json | sponge package.json); done",
-    "publish:all": "npm run publish --workspaces --if-present"
+    "publish:all": "npm publish --workspaces --access public"
   }
 }
