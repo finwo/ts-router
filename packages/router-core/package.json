@@ -1,7 +1,7 @@
 {
-  "name": "@finwo/router-fastify",
+  "name": "@finwo/router",
   "version": "0.3.0",
-  "description": "TypeScript controller decorators for fastify",
+  "description": "TypeScript controller decorators",
   "main": "./lib/cjs/index.js",
   "types": "./lib/cjs/index.d.ts",
   "exports": {
@@ -56,10 +56,7 @@
     "typescript": "4.x"
   },
   "peerDependencies": {
-    "fastify": "^4.15.0",
+    "@finwo/di": "^1.1.8",
     "reflect-metadata": "^0.1.13"
-  },
-  "dependencies": {
-    "@finwo/router": "0.3.0"
   }
 }

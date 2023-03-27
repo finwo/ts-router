@@ -1,6 +1,7 @@
 import 'reflect-metadata';
+
 import { Service } from '@finwo/di';
-import { HTTPMethod } from 'find-my-way';
+import { HTTPMethod } from './http-methods';
 
 // Just mark a class as a router
 export function Controller(prefix?: string): ClassDecorator {
@@ -29,6 +30,7 @@ export function Route(method: HTTPMethod, path: string): MethodDecorator {
 }
 
 // For now, only supports middleware on routes, not controllers
+// Prefixes it due to call order of decorators from factories
 // export function Middleware(mw: Function | Function[]): MethodDecorator {
 export function Middleware(mw: Function | Function[]): MethodDecorator {
   return function(target: any, propertyKey: string | symbol): void {
@@ -36,14 +38,6 @@ export function Middleware(mw: Function | Function[]): MethodDecorator {
     const constructor = target.constructor;
     const wares = Reflect.getMetadata('route:middleware', constructor, propertyKey) || [];
     Reflect.defineMetadata('route:middleware', [mw,wares].flat(), constructor, propertyKey);
-  };
-}
-
-// Mark the route as being a specific version
-export function Version(version: string): MethodDecorator {
-  return function(target: any, propertyKey: string | symbol): void {
-    const constructor = target.constructor;
-    Reflect.defineMetadata('route:version', version, constructor, propertyKey);
   };
 }
 
@@ -68,36 +62,35 @@ export function Res(): ParameterDecorator {
 
 // Method shorthand
 export function Delete(path = '/'): MethodDecorator {
-  return Route('DELETE', path);
+  return Route(HTTPMethod.DELETE, path);
 }
 
 // Method shorthand
 export function Get(path = '/'): MethodDecorator {
-  return Route('GET', path);
+  return Route(HTTPMethod.GET, path);
 }
 
 // Method shorthand
 export function Head(path = '/'): MethodDecorator {
-  return Route('HEAD', path);
+  return Route(HTTPMethod.HEAD, path);
 }
 
 // Method shorthand
 export function Patch(path = '/'): MethodDecorator {
-  return Route('PATCH', path);
+  return Route(HTTPMethod.PATCH, path);
 }
 
 // Method shorthand
 export function Post(path = '/'): MethodDecorator {
-  return Route('POST', path);
+  return Route(HTTPMethod.POST, path);
 }
 
 // Method shorthand
 export function Put(path = '/'): MethodDecorator {
-  return Route('PUT', path);
+  return Route(HTTPMethod.PUT, path);
 }
 
 // Method shorthand
 export function Options(path = '/'): MethodDecorator {
-  return Route('OPTIONS', path);
+  return Route(HTTPMethod.OPTIONS, path);
 }
-

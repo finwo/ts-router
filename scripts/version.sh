@@ -36,4 +36,8 @@ esac
 # And save again
 jq ".version = \"${VERSION}\"" < ../package.json | sponge ../package.json
 npm run version:sync
+
+# Bump core version in adapters
+jq ".dependencies[\"@finwo/router\"] = \"${VERSION}\"" ../packages/router-fastify/package.json | sponge ../packages/router-fastify/package.json
+
 echo ${VERSION}

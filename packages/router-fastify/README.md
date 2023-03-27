@@ -13,7 +13,7 @@ api cleaner.
 To start using @finwo/router-fastify, install the required packages via NPM:
 
 ```sh
-npm install --save @finwo/router-fastify
+npm install --save @finwo/router @finwo/router-fastify
 ```
 
 Import the [reflect-metadata][npm:reflect-metadata:url]
@@ -44,7 +44,7 @@ Basic usage is as follows:
 ```ts
 // some-controller.ts
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { Controller, Req, Res, Get, Version } from '@finwo/router-fastify';
+import { Controller, Req, Res, Get, Version } from '@finwo/router';
 
 @Controller()
 export class SomeController {
@@ -93,27 +93,8 @@ handler instead of fastify's `use` method.
 
 ## Versioned routes
 
-While versioned routes are supported, they are subject to cache poisoning
-attacks. To prevent such attacks, please configure this hook when using
-versioned routes:
-
-See
-https://github.com/fastify/fastify/blob/HEAD/docs/Reference/Routes.md#version-constraints
-for more information.
-
-```ts
-const append = require('vary').append
-fastify.addHook('onSend', (req, reply, payload, done) => {
-  if (req.headers['accept-version']) { // or the custom header you are using
-    let value = reply.getHeader('Vary') || ''
-    const header = Array.isArray(value) ? value.join(', ') : String(value)
-    if ((value = append(header, 'Accept-Version'))) { // or the custom header you are using
-      reply.header('Vary', value)
-    }
-  }
- done()
-})
-```
+Versioned routes are not supported. If you want so, version your routes based on
+their path.
 
 [license:img]: https://img.shields.io/github/license/finwo/router
 [license:url]: https://github.com/finwo/router/blob/main/LICENSE
