@@ -1,19 +1,19 @@
-@finwo/router
-=============
+@finwo/router-fastify
+=====================
 
 [![license][license:img]][license:url]
-[![npm version][npm:@finwo/router:img]][npm:@finwo/router:url]
+[![npm version][npm:@finwo/router-fastify:img]][npm:@finwo/router-fastify:url]
 
-@finwo/router is a TypeScript decorator wrapper for
+@finwo/router-fastify is a TypeScript decorator wrapper for
 [fastify][npm:fastify:url], intended to make setting up a new
 api cleaner.
 
 ## Installation
 
-To start using @finwo/router, install the required packages via NPM:
+To start using @finwo/router-fastify, install the required packages via NPM:
 
 ```sh
-npm install --save @finwo/router
+npm install --save @finwo/router-fastify
 ```
 
 Import the [reflect-metadata][npm:reflect-metadata:url]
@@ -35,7 +35,7 @@ TypeScript config. Add these two lines to your `tsconfig.json` file under the
 "experimentalDecorators": true,
 ```
 
-Now you are ready to use @finwo/router with your project!
+Now you are ready to use @finwo/router-fastify with your project!
 
 ## Usage
 
@@ -44,7 +44,7 @@ Basic usage is as follows:
 ```ts
 // some-controller.ts
 import { FastifyRequest, FastifyReply } from 'fastify';
-import { Controller, Req, Res, Get, Version } from '@finwo/router';
+import { Controller, Req, Res, Get, Version } from '@finwo/router-fastify';
 
 @Controller()
 export class SomeController {
@@ -69,7 +69,7 @@ export class SomeController {
 
 // index.ts
 import fastify = require('fastify')();
-import { plugin } from '@finwo/router';
+import { plugin } from '@finwo/router-fastify';
 
 // Build a list of controllers we'll start our application with
 // Classes registered as controller will NOT be included by default
@@ -118,7 +118,7 @@ fastify.addHook('onSend', (req, reply, payload, done) => {
 [license:img]: https://img.shields.io/github/license/finwo/router
 [license:url]: https://github.com/finwo/router/blob/main/LICENSE
 [npm:@finwo/di:url]: https://npmjs.com/package/@finwo/di
-[npm:@finwo/router:url]: https://npmjs.com/package/@finwo/router
-[npm:@finwo/router:img]: https://img.shields.io/npm/v/@finwo/router
+[npm:@finwo/router-fastify:url]: https://npmjs.com/package/@finwo/router-fastify
+[npm:@finwo/router-fastify:img]: https://img.shields.io/npm/v/@finwo/router-fastify
 [npm:fastify:url]: https://npmjs.com/package/fastify
 [npm:reflect-metadata:url]: https://npmjs.com/package/reflect-metadata
