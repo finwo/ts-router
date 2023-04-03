@@ -1,8 +1,8 @@
 import 'reflect-metadata';
 import { HTTPMethod } from './http-methods';
-
 import { Container } from '@finwo/di';
 
+export * from './decorators';
 export { HTTPMethod };
 export type NextFn    = () => void;
 export type HandlerFn = (req: unknown, res: unknown, next: NextFn) => void | Promise<void>;
