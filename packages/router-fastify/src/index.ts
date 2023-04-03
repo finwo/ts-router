@@ -21,6 +21,11 @@ export function plugin(router: FastifyInstance, controllers: Function[], done: F
       };
     }
 
+    // Remove slash at the end of the path
+    if (opts.path.slice(-1) == '/') {
+      opts.path = opts.path.substring(0, opts.path.length - 1);
+    }
+
     // And pass the route over to fastify
     router.route({
       ...(opts as Record<string, unknown>),
