@@ -5,6 +5,7 @@
     "packages/router-fastify"
   ],
   "scripts": {
+    "linter:all": "npm run linter --workspaces",
     "install:all": "npm install --workspaces",
     "build:all": "npm run build --workspaces --if-present",
     "version:sync": "VERSION=$(jq -r '.version' package.json) ; for d in $(jq -r '.workspaces[]' package.json); do (cd $d; jq \".version = \\\"$VERSION\\\"\" package.json | sponge package.json); done",
