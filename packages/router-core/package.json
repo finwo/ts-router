@@ -1,6 +1,6 @@
 {
   "name": "@finwo/router",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "description": "TypeScript controller decorators",
   "main": "./lib/cjs/index.js",
   "types": "./lib/cjs/index.d.ts",
