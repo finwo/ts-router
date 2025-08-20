@@ -43,20 +43,22 @@ export function Middleware(mw: Function | Function[]): MethodDecorator {
 
 // Mark a handler parameter as wanting the request there
 export function Req(): ParameterDecorator {
-  return function(target: any, key: string | symbol, index: number) {
+  return function(target: any, propertyKey: string | symbol | undefined, index: number) {
+    if (!propertyKey) return;
     const constructor = target.constructor;
-    const paramTypes: any[] = Reflect.getMetadata('design:paramtypes', constructor, key) || [];
+    const paramTypes: any[] = Reflect.getMetadata('design:paramtypes', constructor, propertyKey) || [];
     paramTypes[index] = 'req';
-    Reflect.defineMetadata('design:paramtypes', paramTypes, constructor, key);
+    Reflect.defineMetadata('design:paramtypes', paramTypes, constructor, propertyKey);
   };
 }
 
 export function Res(): ParameterDecorator {
-  return function(target: any, key: string | symbol, index: number) {
+  return function(target: any, propertyKey: string | symbol | undefined, index: number) {
+    if (!propertyKey) return;
     const constructor = target.constructor;
-    const paramTypes: any[] = Reflect.getMetadata('design:paramtypes', constructor, key) || [];
+    const paramTypes: any[] = Reflect.getMetadata('design:paramtypes', constructor, propertyKey) || [];
     paramTypes[index] = 'res';
-    Reflect.defineMetadata('design:paramtypes', paramTypes, constructor, key);
+    Reflect.defineMetadata('design:paramtypes', paramTypes, constructor, propertyKey);
   };
 }
 
