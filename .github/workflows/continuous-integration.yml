@@ -18,7 +18,7 @@ jobs:
       - run: npm run install:all
       - run: npm run linter:all
       - run: npm run build:all
-      - run: npm publish
+      - run: npm run publish:all
         if: startsWith(github.ref, 'refs/tags/')
 
   release:
