@@ -55,7 +55,7 @@
     "typescript": "^5.9.x"
   },
   "peerDependencies": {
-    "@finwo/di": "^1.2.2",
+    "@finwo/di": "^1.2.3",
     "reflect-metadata": "^0.1.13"
   }
 }

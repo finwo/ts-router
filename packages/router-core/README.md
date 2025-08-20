@@ -19,8 +19,10 @@ npm install --save @finwo/router
 ```
 
 This package makes use of decorators and decorator metadata using the
-[reflect-metadata][npm:reflect-metadata:url] package, which in turn means this
-package is not compatible with TS &gt; 5.
+[reflect-metadata][npm:reflect-metadata:url] package, which requires enabling
+experimental decorators and emitting decorator metadata. It is not compatible
+with the TS5 stage 3 decorators
+[and this is not the only library affected](https://github.com/microsoft/tsyringe/issues/225).
 
 Don't forget to enable emitting decorator metadata in your TypeScript config.
 Add these two lines to your `tsconfig.json` file under the `compilerOptions`
