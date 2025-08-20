@@ -40,4 +40,5 @@ npm run version:sync
 # Bump core version in adapters
 jq ".dependencies[\"@finwo/router\"] = \"${VERSION}\"" ../packages/router-fastify/package.json | sponge ../packages/router-fastify/package.json
 
+git tag v${VERSION}
 echo ${VERSION}
